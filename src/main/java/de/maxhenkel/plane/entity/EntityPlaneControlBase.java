@@ -25,9 +25,9 @@ public abstract class EntityPlaneControlBase extends EntityPlaneDamageBase {
     private static final EntityDataAccessor<Boolean> DOWN = SynchedEntityData.defineId(EntityPlaneControlBase.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> BRAKE = SynchedEntityData.defineId(EntityPlaneControlBase.class, EntityDataSerializers.BOOLEAN);
 
-    public static final double MAX_ENGINE_SPEED = 1.5D;
+    public static final double MAX_ENGINE_SPEED = 2.0D;
     public static final double ENGINE_ACCELERATION = 0.005D;
-    public static final double BRAKE_POWER = 0.012D;
+    public static final double BRAKE_POWER = 0.004D;
 
     public EntityPlaneControlBase(EntityType type, Level worldIn) {
         super(type, worldIn);
@@ -50,9 +50,9 @@ public abstract class EntityPlaneControlBase extends EntityPlaneDamageBase {
         if (!level.isClientSide) {
             if (isStarted()) {
                 if (isThrustPositive()) {
-                    setEngineSpeed(Math.min(getEngineSpeed() + 0.025F, 1F));
+                    setEngineSpeed(Math.min(getEngineSpeed() + 0.02F, 1F));
                 } else if (isThrustNegative()) {
-                    setEngineSpeed(Math.max(getEngineSpeed() - 0.025F, 0F));
+                    setEngineSpeed(Math.max(getEngineSpeed() - 0.02F, 0F));
                 }
             } else {
                 setEngineSpeed(0F);
@@ -142,6 +142,8 @@ public abstract class EntityPlaneControlBase extends EntityPlaneDamageBase {
         // ----- PITCH ------
     }
 
+    public abstract double getBrakePower();
+
     private void controlPlane() {
 
         if (!isVehicle()) {
@@ -162,18 +164,18 @@ public abstract class EntityPlaneControlBase extends EntityPlaneDamageBase {
 
         if (isCollidedVertical()) {
             double speed = getDeltaMovement().length();
-            double maxEngineSpeed = MAX_ENGINE_SPEED * engineSpeed;
+            double maxEngineSpeed = MAX_ENGINE_SPEED * engineSpeed * (100-getPlaneDamage()) / 100.0;
 
             if (speed < maxEngineSpeed) {
                 speed = Math.min(speed + engineSpeed * ENGINE_ACCELERATION, maxEngineSpeed);
             }
 
             if (isBrake()) {
-                speed = decreaseToZero(speed, (1D / (speed + 1D)) * BRAKE_POWER); // brake resistance
+                speed = decreaseToZero(speed, (1D / (speed + 1D)) * getBrakePower()); // brake resistance
             }
 
             if (engineSpeed <= 0F) {
-                speed = decreaseToZero(speed, 0.002D); // ground resistance
+                speed = decreaseToZero(speed, 0.001D); // ground resistance
             }
 
             Vec3 motion = getLookAngle().normalize().scale(speed).multiply(1D, 0D, 1D);
