@@ -20,7 +20,7 @@ public class ServerConfig extends ConfigBase {
 
     public ServerConfig(ForgeConfigSpec.Builder builder) {
         super(builder);
-        validFuelsSpec = builder.defineList("valid_fuels", Arrays.asList("car:bio_diesel"), Objects::nonNull);
+        validFuelsSpec = builder.defineList("valid_fuels", List.of("car:bio_diesel", "immersiveengineering:biodiesel"), Objects::nonNull);
     }
 
     @Override

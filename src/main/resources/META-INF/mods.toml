@@ -3,13 +3,13 @@ loaderVersion="${mod_loader_version}"
 license="All rights reserved"
 issueTrackerURL="https://github.com/henkelmax/ultimate-plane-mod/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/ultimate-plane-mod"
-authors="${mod_vendor}"
+authors="${mod_vendor}, ShinQdan"
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
-displayName="${mod_name}"
+displayName="${mod_name}-SQ"
 updateJSONURL="https://maxhenkel.de/update/plane.json"
-description='''Planes in Minecraft'''
+description='''Planes in Minecraft. Slightly tweaked fuels and built-in IE settings by ShinQdan.'''
 [[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true
